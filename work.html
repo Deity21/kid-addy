@@ -213,6 +213,32 @@ body{
   *, *::before, *::after{ animation: none !important; transition: none !important; }
 }
 
+/* --- Mobile overlap fix (iOS/Safari) --- */
+
+/* Create a local stacking context per card so children don't bleed over */
+.case_card{ isolation:isolate; }
+
+/* Make sure columns can shrink and stack cleanly */
+.case_card > .col{ min-width:0; position:relative; z-index:0; }
+
+/* Keep the text column above the media layer on small screens */
+.case_card > .col:nth-child(2){ z-index:2; }
+
+/* Keep the media below text stack */
+.media_wrap{ position:relative; z-index:1; }
+
+/* iOS bug: transformed elements may overlap siblings – disable on mobile */
+@media (max-width: 1080px){
+  .media_wrap{ transform:none; }
+  .media_wrap img{ transform:none; }
+}
+
+/* If you still see extra space, let the image’s natural height drive the box */
+@media (max-width: 720px){
+  .case_card .media_wrap{ min-height:auto; }
+}
+
+
   </style>
 </head>
 <body>
